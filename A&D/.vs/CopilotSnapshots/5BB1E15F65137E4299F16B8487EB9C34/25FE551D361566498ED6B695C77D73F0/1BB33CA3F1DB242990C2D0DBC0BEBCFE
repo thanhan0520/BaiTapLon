@@ -1,0 +1,96 @@
+﻿@model A_D.Models.Milk
+
+@{
+    ViewData["Title"] = "Xóa Sản Phẩm";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h1 class="mb-4">
+            <i class="fas fa-trash"></i> @ViewData["Title"]
+        </h1>
+
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle"></i> Xác Nhận Xóa Sản Phẩm
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    <strong>Cảnh báo!</strong> Bạn sắp xóa sản phẩm này vĩnh viễn. Hành động này không thể hoàn tác.
+                </div>
+
+                <div class="mb-4">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Tên Sữa:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.MilkName
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Hãng:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.Brand
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Trọng Lượng:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.Weight
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Giá:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="badge bg-success">@string.Format("{0:C}", Model.Price)</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Số Lượng Tồn:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.StockQuantity
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Hạn Sử Dụng:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.ExpiryDate.ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" action="@Url.Action("Delete", "Home", new { area = "Admin", id = Model.MilkId })" style="display: inline;">
+                    @Html.AntiForgeryToken()
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="@Url.Action("dashBoard", "Home", new { area = "Admin" })" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Hủy
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Xóa Sản Phẩm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

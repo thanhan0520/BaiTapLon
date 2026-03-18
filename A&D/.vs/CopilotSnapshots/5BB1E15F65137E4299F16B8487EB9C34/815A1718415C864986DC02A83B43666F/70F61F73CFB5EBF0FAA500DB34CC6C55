@@ -1,0 +1,105 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using A_D.Models;
+
+namespace A_D.Areas.Admin.Controllers
+{
+    public class HomeController : Controller
+    {
+        private readonly QuanLiBanSuaContext _context;
+
+        public HomeController(QuanLiBanSuaContext context)
+        {
+            _context = context;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult dashBoard()
+        {
+            var milkList = _context.Milk.ToList();
+            return View(milkList);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Milk milk)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Milk.Add(milk);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(dashBoard));
+            }
+            return View(milk);
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var milk = _context.Milk.Find(id);
+            if (milk == null)
+            {
+                return NotFound();
+            }
+            return View(milk);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Milk milk)
+        {
+            if (id != milk.MilkId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(milk);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(dashBoard));
+            }
+            return View(milk);
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var milk = _context.Milk.Find(id);
+            if (milk == null)
+            {
+                return NotFound();
+            }
+            return View(milk);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var milk = _context.Milk.Find(id);
+            if (milk != null)
+            {
+                _context.Milk.Remove(milk);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(dashBoard));
+        }
+    }
+}

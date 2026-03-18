@@ -1,0 +1,65 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using A_D.Models;
+using A_D.Areas.Admin.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace A_D.Areas.Admin.Controllers;
+
+[Area("Admin")]
+public class HomeController : Controller
+{
+    private readonly QuanLiBanSuaContext _context;
+
+    public HomeController(QuanLiBanSuaContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        try
+        {
+            var totalProducts = await _context.Milk.CountAsync();
+            var totalUsers = await _context.Users.CountAsync();
+
+            // Kiểm tra xem bảng Orders có tồn tại không
+            int totalOrders = 0;
+            decimal totalRevenue = 0;
+
+            try
+            {
+                totalOrders = await _context.Orders.CountAsync();
+                totalRevenue = await _context.Orders
+                    .AsNoTracking()
+                    .SumAsync(o => o.TotalAmount) ?? 0;
+            }
+            catch
+            {
+                // Nếu bảng Orders chưa tồn tại, đặt giá trị mặc định
+                totalOrders = 0;
+                totalRevenue = 0;
+            }
+
+            var lowStockCount = await _context.Milk
+                .Where(m => m.StockQuantity < 10)
+                .CountAsync();
+
+            var model = new AdminDashboardViewModel
+            {
+                TotalProducts = totalProducts,
+                TotalUsers = totalUsers,
+                TotalOrders = totalOrders,
+                TotalRevenue = totalRevenue,
+                LowStockCount = lowStockCount
+            };
+
+            return View(model);
+        }
+        catch (Exception ex)
+        {
+            // Log hoặc hiển thị thông báo lỗi
+            ViewBag.Error = $"Lỗi: {ex.Message}";
+            return View(new AdminDashboardViewModel());
+        }
+    }
+}

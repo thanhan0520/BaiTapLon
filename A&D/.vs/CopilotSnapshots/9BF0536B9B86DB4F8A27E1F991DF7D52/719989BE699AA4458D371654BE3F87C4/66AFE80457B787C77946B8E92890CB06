@@ -1,0 +1,167 @@
+﻿@model IEnumerable<Milk>
+
+@{
+    ViewData["Title"] = "Quản Lý Sản Phẩm";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .milk-container {
+        padding: 20px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .btn-create {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-create:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(99,102,241,0.3);
+    }
+
+    .milk-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .milk-table thead {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+    }
+
+    .milk-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    .milk-table td {
+        padding: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .milk-table tbody tr:hover {
+        background: #f9fafb;
+    }
+
+    .milk-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .btn-edit, .btn-delete {
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-edit {
+        background: #4f46e5;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #4338ca;
+    }
+
+    .btn-delete {
+        background: #ef4444;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #dc2626;
+    }
+
+    .price-badge {
+        background: #ecfdf5;
+        color: #047857;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="milk-container">
+    <div class="page-header">
+        <h1>📦 Quản Lý Sản Phẩm Sữa</h1>
+        <a href="/Administrator/Milk/Create" class="btn-create">+ Thêm Sản Phẩm</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <table class="milk-table">
+            <thead>
+                <tr>
+                    <th>Hình Ảnh</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Thương Hiệu</th>
+                    <th>Khối Lượng</th>
+                    <th>Giá</th>
+                    <th>Kho</th>
+                    <th>Hạn Sử Dụng</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var milk in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(milk.ImagePath))
+                            {
+                                <img src="@milk.ImagePath" alt="@milk.MilkName" class="milk-image">
+                            }
+                            else
+                            {
+                                <img src="/image/sua.jpg" alt="Default" class="milk-image">
+                            }
+                        </td>
+                        <td><strong>@milk.MilkName</strong></td>
+                        <td>@milk.Brand</td>
+                        <td>@milk.Weight</td>
+                        <td><span class="price-badge">@milk.Price.ToString("N0") ₫</span></td>
+                        <td>@milk.StockQuantity</td>
+                        <td>@milk.ExpiryDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a href="/Administrator/Milk/Edit/@milk.MilkId" class="btn-edit">Sửa</a>
+                            <form method="post" action="/Administrator/Milk/Delete/@milk.MilkId" style="display:inline;">
+                                <button type="submit" class="btn-delete" onclick="return confirm('Bạn chắc chắn muốn xóa?')">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div style="text-align: center; padding: 40px;">
+            <h3>Không có sản phẩm nào</h3>
+            <p><a href="/Administrator/Milk/Create">Thêm sản phẩm đầu tiên</a></p>
+        </div>
+    }
+</div>

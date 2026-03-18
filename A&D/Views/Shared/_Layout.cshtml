@@ -1,0 +1,455 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - A&C Milk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/A_D.styles.css" asp-append-version="true" />
+    <style>
+        :root {
+            --primary-color: #ffc107;
+            --secondary-color: #2d2d5f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background: #f8f9fa;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: var(--secondary-color);
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .navbar .container {
+            height: 64px;
+        }
+
+        .navbar-brand {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--primary-color) !important;
+            letter-spacing: 1px;
+            padding: 0;
+            line-height: 1.1;
+        }
+
+        .navbar-brand small {
+            color: rgba(255,255,255,0.6);
+            font-weight: 400;
+            font-size: 0.65rem;
+            display: block;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 0.875rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        /* Search */
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-form .form-control {
+            border-radius: 4px 0 0 4px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-right: none;
+            font-size: 0.875rem;
+            width: 200px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 0.4rem 0.75rem;
+            height: 36px;
+        }
+
+        .search-form .form-control::placeholder {
+            color: rgba(255,255,255,0.45);
+        }
+
+        .search-form .form-control:focus {
+            background: rgba(255,255,255,0.18);
+            box-shadow: none;
+            outline: none;
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .search-form .btn-search {
+            border-radius: 0 4px 4px 0;
+            background: var(--primary-color);
+            border: none;
+            color: var(--secondary-color);
+            padding: 0 0.875rem;
+            font-weight: 700;
+            height: 36px;
+            cursor: pointer;
+        }
+
+        /* Cart button */
+        .btn-cart {
+            background: var(--primary-color);
+            color: var(--secondary-color) !important;
+            font-size: 0.875rem;
+            font-weight: 700;
+            padding: 0.4rem 1rem !important;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Divider */
+        .nav-divider {
+            width: 1px;
+            height: 22px;
+            background: rgba(255,255,255,0.2);
+            margin: 0 0.75rem;
+            flex-shrink: 0;
+        }
+
+        /* User icon dropdown */
+        .user-dropdown .dropdown-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            color: #fff !important;
+            font-size: 1.05rem;
+            padding: 0 !important;
+        }
+
+        .user-dropdown .dropdown-toggle::after {
+            display: none;
+        }
+
+        .user-dropdown .dropdown-menu {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 0.5rem 0;
+            min-width: 210px;
+            margin-top: 0.6rem !important;
+            right: 0;
+            left: auto;
+        }
+
+        .user-dropdown .dropdown-header {
+            font-size: 0.78rem;
+            color: #aaa;
+            padding: 0.5rem 1rem 0.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .user-dropdown .dropdown-item {
+            font-size: 0.875rem;
+            padding: 0.6rem 1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .user-dropdown .dropdown-item:hover {
+            background: #f5f5f5;
+            color: var(--secondary-color);
+        }
+
+        .user-dropdown .dropdown-item.text-danger:hover {
+            background: #fee2e2;
+        }
+
+        .user-dropdown .dropdown-divider {
+            margin: 0.3rem 0;
+            border-color: #f0f0f0;
+        }
+
+        /* Toggler */
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.3);
+            padding: 0.25rem 0.5rem;
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1);
+            width: 1.2em;
+            height: 1.2em;
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            border-radius: 6px;
+            border: none;
+            padding: 0.875rem 1.25rem;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        /* ===== MAIN ===== */
+        main {
+            min-height: calc(100vh - 380px);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--secondary-color);
+            color: rgba(255,255,255,0.8);
+            padding: 3rem 0 1.5rem;
+            margin-top: 5rem;
+        }
+
+        footer h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        footer p {
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        footer a:hover { color: var(--primary-color); }
+
+        footer hr { border-color: rgba(255,255,255,0.1); margin: 1.5rem 0; }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: rgba(255,255,255,0.8);
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @@media (max-width: 991px) {
+            .navbar .container { height: auto; padding: 0.75rem 1rem; }
+            .search-form .form-control { width: 100%; }
+            .nav-divider { display: none; }
+            .navbar-collapse { padding: 0.75rem 0; }
+        }
+
+        @@media (max-width: 768px) {
+            .navbar-brand { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+
+            <!-- Logo -->
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                A&C Milk
+                <small>Sữa Chất Lượng Cao</small>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <!-- Menu chính -->
+                <ul class="navbar-nav ms-4 me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Trang Chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Order" asp-action="MyOrders">Đơn Hàng</a>
+                    </li>
+                </ul>
+
+                <!-- Search -->
+                <form asp-controller="Home" asp-action="Search" method="get" class="search-form me-3">
+                    <input type="text" name="keyword" class="form-control" placeholder="Tìm sản phẩm..." autocomplete="off" />
+                    <button class="btn-search" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+
+                <!-- Giỏ hàng -->
+                <a class="nav-link btn-cart me-3" asp-controller="Cart" asp-action="CartView">
+                    <i class="fas fa-shopping-cart me-1"></i>Giỏ Hàng
+                </a>
+
+                <div class="nav-divider d-none d-lg-flex"></div>
+
+                <!-- User dropdown -->
+                <div class="user-dropdown dropdown ms-2">
+                    <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        @if (Context.Session.GetInt32("UserId") != null)
+                        {
+                            <li>
+                                <span class="dropdown-header">
+                                    <i class="fas fa-user-circle me-1"></i>@Context.Session.GetString("UserName")
+                                </span>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+
+                            <li>
+                                <a class="dropdown-item" asp-controller="User" asp-action="Profile">
+                                    <i class="fas fa-id-card me-2 text-muted"></i>Hồ Sơ Cá Nhân
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Order" asp-action="MyOrders">
+                                    <i class="fas fa-box me-2 text-muted"></i>Đơn Hàng Của Tôi
+                                </a>
+                            </li>
+
+                            @if ((Context.Session.GetString("UserRole") ?? "").Trim().ToLower() == "admin")
+                            {
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <a class="dropdown-item" href="/Administrator/Home/Index">
+                                        <i class="fas fa-cog me-2 text-muted"></i>Quản Trị
+                                    </a>
+                                </li>
+                            }
+
+                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <a class="dropdown-item text-danger" asp-controller="User" asp-action="Logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng Xuất
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="dropdown-item" asp-controller="User" asp-action="Login">
+                                    <i class="fas fa-sign-in-alt me-2 text-muted"></i>Đăng Nhập
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="User" asp-action="Register">
+                                    <i class="fas fa-user-plus me-2 text-muted"></i>Đăng Ký
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alerts -->
+    <div class="container mt-3">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["FailMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>@TempData["FailMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+    </div>
+
+    <!-- Main Content -->
+    <main class="py-4">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <p>Nơi c                    <h5>A&C Milk</h5>
+ung cấp sữa chất lượng cao,  mạnh cho gia đình bạn với những sản phẩm được chọn lọc kỹ càng.</p>
+                </div>lành
+                <div class="col-md-4 mb-4">
+                    <h5>Liên Hệ</h5>
+                    <p><i class="fas fa-phone me-2"></i>(028) XXXX-XXXX</p>
+                    <p><i class="fas fa-envelope me-2"></i>contact@a-d.com</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Kết Nối</h5>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="text-center">
+                <p style="font-size:0.8rem; color:rgba(255,255,255,0.4); margin:0;">
+                    &copy; 2026 A&C Milk. All Rights Reserved. &nbsp;|&nbsp;
+                    <a asp-controller="Home" asp-action="Privacy">Chính Sách Bảo Mật</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

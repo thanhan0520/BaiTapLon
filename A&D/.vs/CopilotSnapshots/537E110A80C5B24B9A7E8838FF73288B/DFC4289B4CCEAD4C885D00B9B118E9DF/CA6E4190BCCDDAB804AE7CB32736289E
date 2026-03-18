@@ -1,0 +1,138 @@
+﻿@model A_D.Models.Order
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+}
+
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-receipt"></i> Chi tiết đơn hàng #@Model.OrderId
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Người dùng</label>
+                <p>@Model.User?.UserName</p>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Email</label>
+                <p>@Model.User?.Email</p>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Ngày đặt hàng</label>
+                <p>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm:ss")</p>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Trạng thái</label>
+                <p>
+                    @switch(Model.Status)
+                    {
+                        case "Pending":
+                            <span class="badge badge-warning">Chờ xử lý</span>
+                            break;
+                        case "Processing":
+                            <span class="badge bg-info" style="color: white;">Đang xử lý</span>
+                            break;
+                        case "Shipped":
+                            <span class="badge bg-primary" style="color: white;">Đã gửi</span>
+                            break;
+                        case "Delivered":
+                            <span class="badge badge-success">Đã giao</span>
+                            break;
+                        case "Cancelled":
+                            <span class="badge badge-danger">Đã hủy</span>
+                            break;
+                        default:
+                            <span class="badge bg-secondary" style="color: white;">@Model.Status</span>
+                            break;
+                    }
+                </p>
+            </div>
+        </div>
+
+        <hr>
+
+        <h5 class="mb-3">Danh sách sản phẩm</h5>
+        @if (Model.OrderItems != null && Model.OrderItems.Count > 0)
+        {
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr>
+                                <td>@item.Milk?.MilkName</td>
+                                <td>@item.Quantity</td>
+                                <td>@String.Format("{0:N0}", item.Price)đ</td>
+                                <td>@String.Format("{0:N0}", item.Quantity * item.Price)đ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Địa chỉ giao hàng</label>
+                <p>@Model.ShippingAddress</p>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Số điện thoại</label>
+                <p>@Model.PhoneNumber</p>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Ghi chú</label>
+                <p>@Model.Notes</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Tổng tiền</label>
+                <h5 style="color: #dc2626;">@String.Format("{0:N0}", Model.TotalAmount)đ</h5>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="d-flex gap-2">
+            <form asp-action="UpdateStatus" method="post" style="display:inline; flex: 1;">
+                <input type="hidden" name="id" value="@Model.OrderId" />
+                <div class="input-group">
+                    <select name="status" class="form-select">
+                        <option value="Pending" selected="@(Model.Status == "Pending")">Chờ xử lý</option>
+                        <option value="Processing" selected="@(Model.Status == "Processing")">Đang xử lý</option>
+                        <option value="Shipped" selected="@(Model.Status == "Shipped")">Đã gửi</option>
+                        <option value="Delivered" selected="@(Model.Status == "Delivered")">Đã giao</option>
+                        <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Đã hủy</option>
+                    </select>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-sync"></i> Cập nhật trạng thái
+                    </button>
+                </div>
+            </form>
+            <a href="@Url.Action("Index", "Order", new { area = "Admin" })" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </div>
+</div>

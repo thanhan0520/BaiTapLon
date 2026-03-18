@@ -1,0 +1,503 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>@ViewData["Title"] - Admin Quản Lý Bán Sữa</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Bootstrap CSS -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, #4f46e5, #6366f1);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .admin-sidebar .brand {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+        }
+
+        .admin-sidebar .brand h3 {
+            font-size: 1.3rem;
+            margin: 0;
+        }
+
+        .admin-sidebar .nav-menu {
+            list-style: none;
+        }
+
+        .admin-sidebar .nav-menu li {
+            padding: 0;
+        }
+
+        .admin-sidebar .nav-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .admin-sidebar .nav-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: white;
+        }
+
+        .admin-sidebar .nav-menu a.active {
+            background: rgba(255,255,255,0.2);
+            border-left-color: white;
+        }
+
+        .admin-sidebar .nav-menu i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .admin-main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 20px;
+        }
+
+        .admin-header {
+            background: white;
+            padding: 20px;
+            border-radius: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #333;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            position: relative;
+        }
+
+        .user-menu a, .user-menu button {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 0;
+            text-decoration: none;
+            cursor: pointer;
+            transition: none;
+        }
+
+        .user-menu a:hover, .user-menu button:hover {
+            transform: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .profile-menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-menu-btn:hover {
+            opacity: 0.8;
+        }
+
+        .profile-avatar-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-menu-text {
+            color: #333;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0;
+            min-width: 250px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-top: 10px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown .profile-header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .profile-avatar-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 0;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            overflow: hidden;
+            font-size: 2rem;
+        }
+
+        .profile-avatar-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-dropdown .profile-header .user-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .profile-dropdown .profile-header .user-email {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin: 5px 0 0 0;
+        }
+
+        .profile-dropdown .dropdown-menu-items {
+            padding: 10px 0;
+        }
+
+        .profile-dropdown .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: none;
+        }
+
+        .profile-dropdown .dropdown-item:hover {
+            background: #f3f4f6;
+        }
+
+        .profile-dropdown .dropdown-item i {
+            font-size: 1rem;
+            color: #6366f1;
+            width: 20px;
+        }
+
+        .profile-dropdown hr {
+            margin: 10px 0;
+            border: none;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .profile-dropdown .dropdown-item.logout {
+            color: #ef4444;
+        }
+
+        .profile-dropdown .dropdown-item.logout:hover {
+            background: #fee2e2;
+        }
+
+        .profile-dropdown .dropdown-item.logout i {
+            color: #ef4444;
+        }
+
+        .admin-content {
+            background: white;
+            border-radius: 0;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        @@media (max-width: 768px) {
+            .admin-sidebar {
+                width: 200px;
+            }
+
+            .admin-main {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+            }
+
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .admin-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .admin-main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="brand">
+                <h3>🥛 Admin Panel</h3>
+                <small>Quản Lý Bán Sữa</small>
+            </div>
+
+            <ul class="nav-menu">
+                <li>
+                    <a href="/Administrator/Home/Index">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Administrator/Milk/Index">
+                        <i class="bi bi-box"></i>
+                        <span>Sản Phẩm</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Administrator/Order/Index">
+                        <i class="bi bi-bag-check"></i>
+                        <span>Đơn Hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Administrator/User/Index">
+                        <i class="bi bi-people"></i>
+                        <span>Người Dùng</span>
+                    </a>
+                </li>
+                <hr style="border-color: rgba(255,255,255,0.2); margin: 15px 0;">
+                <li>
+                    <a href="/">
+                        <i class="bi bi-house"></i>
+                        <span>Về Trang Chủ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/User/Logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Đăng Xuất</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>@ViewData["Title"]</h1>
+                <div class="user-menu">
+                    <button class="profile-menu-btn" id="profileMenuBtn">
+                        <div class="profile-avatar-btn" id="navProfileAvatar">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <span class="profile-menu-text" id="adminName">Admin</span>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-header">
+                            <div class="profile-avatar-img" id="headerProfileImage">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <p class="user-name" id="dropdownAdminName">Admin</p>
+                            <p class="user-email" id="dropdownAdminEmail">admin@example.com</p>
+                        </div>
+                        <div class="dropdown-menu-items">
+                            <a href="/Administrator/Profile/Overview" class="dropdown-item">
+                                <i class="bi bi-person"></i>
+                                <span>Tổng quan</span>
+                            </a>
+                            <a href="/Administrator/Profile/Edit" class="dropdown-item">
+                                <i class="bi bi-pencil"></i>
+                                <span>Chỉnh sửa hồ sơ</span>
+                            </a>
+                            <a href="/Administrator/Profile/Settings" class="dropdown-item">
+                                <i class="bi bi-gear"></i>
+                                <span>Cài đặt</span>
+                            </a>
+                            <a href="/Administrator/Profile/ChangePassword" class="dropdown-item">
+                                <i class="bi bi-key"></i>
+                                <span>Thay đổi mật khẩu</span>
+                            </a>
+                            <hr>
+                            <a href="/User/Logout" class="dropdown-item logout">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Đăng Xuất</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["FailMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["FailMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <div class="admin-content">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Profile Menu Dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileMenuBtn = document.getElementById('profileMenuBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            const navProfileAvatar = document.getElementById('navProfileAvatar');
+
+            // Load profile image from session (server-side)
+            const profileImage = '@Html.Raw(Context.Session.GetString("AdminProfileImage") ?? "")';
+            const adminFullName = '@Html.Raw(Context.Session.GetString("AdminFullName") ?? "Admin")';
+            const adminEmail = '@Html.Raw(Context.Session.GetString("AdminEmail") ?? "admin@example.com")';
+
+            // Update profile image in navbar
+            if (profileImage) {
+                const img = document.createElement('img');
+                img.src = profileImage;
+                img.alt = 'Profile';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                navProfileAvatar.innerHTML = '';
+                navProfileAvatar.appendChild(img);
+            }
+
+            // Update profile image in dropdown header
+            if (profileImage) {
+                const headerProfileImage = document.getElementById('headerProfileImage');
+                const img = document.createElement('img');
+                img.src = profileImage;
+                img.alt = 'Profile';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                headerProfileImage.innerHTML = '';
+                headerProfileImage.appendChild(img);
+            }
+
+            document.getElementById('adminName').textContent = adminFullName;
+            document.getElementById('dropdownAdminName').textContent = adminFullName;
+            document.getElementById('dropdownAdminEmail').textContent = adminEmail;
+
+            // Toggle dropdown when clicking profile button
+            profileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!profileMenuBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.remove('show');
+                }
+            });
+
+            // Close dropdown when clicking on a menu item
+            const dropdownItems = profileDropdown.querySelectorAll('.dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    profileDropdown.classList.remove('show');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

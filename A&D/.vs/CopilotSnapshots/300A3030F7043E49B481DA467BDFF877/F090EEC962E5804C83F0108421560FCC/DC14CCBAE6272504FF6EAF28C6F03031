@@ -1,0 +1,234 @@
+﻿@model Order
+
+@{
+    ViewData["Title"] = "Chi Tiết Đơn Hàng";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .order-detail-container {
+        padding: 20px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .detail-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+
+    .order-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .info-row {
+        margin-bottom: 15px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #666;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        color: #333;
+        margin-top: 5px;
+    }
+
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .items-table thead {
+        background: #f3f4f6;
+    }
+
+    .items-table th,
+    .items-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .items-table th {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .status-update {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .status-form {
+        display: flex;
+        gap: 10px;
+    }
+
+    .status-form select {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .btn-update {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-update:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(99,102,241,0.3);
+    }
+
+    .btn-back {
+        background: #e5e7eb;
+        color: #333;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .status-processing {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-completed {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .total-row {
+        background: #f9fafb;
+        font-weight: 600;
+    }
+
+    .amount {
+        color: #047857;
+        font-weight: 600;
+    }
+</style>
+
+<div class="order-detail-container">
+    <div style="margin-bottom: 20px;">
+        <a href="/Administrator/Order/Index" class="btn-back">← Quay Lại</a>
+    </div>
+
+    <div class="detail-card">
+        <div class="order-header">
+            <div>
+                <div class="info-row">
+                    <div class="info-label">Mã Đơn Hàng</div>
+                    <div class="info-value">#@Model.OrderId</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Khách Hàng</div>
+                    <div class="info-value">@Model.User?.UserName</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">@Model.User?.Email</div>
+                </div>
+            </div>
+            <div>
+                <div class="info-row">
+                    <div class="info-label">Ngày Đặt</div>
+                    <div class="info-value">@Model.OrderDate?.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Trạng Thái</div>
+                    <div class="info-value">
+                        @{
+                            var statusClass = Model.OrderStatus?.ToLower() switch
+                            {
+                                "pending" => "status-pending",
+                                "processing" => "status-processing",
+                                "completed" => "status-completed",
+                                "cancelled" => "status-cancelled",
+                                _ => "status-pending"
+                            };
+                        }
+                        <span class="status-badge @statusClass">@Model.OrderStatus</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 25px;">Chi Tiết Sản Phẩm</h3>
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Sản Phẩm</th>
+                    <th>Giá</th>
+                    <th>Số Lượng</th>
+                    <th>Thành Tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderItems ?? new List<OrderItem>())
+                {
+                    <tr>
+                        <td>@item.Milk?.MilkName</td>
+                        <td><span class="amount">@item.Price?.ToString("N0") ₫</span></td>
+                        <td>@item.Quantity</td>
+                        <td><span class="amount">@((item.Price ?? 0) * (item.Quantity ?? 1)).ToString("N0") ₫</span></td>
+                    </tr>
+                }
+                <tr class="total-row">
+                    <td colspan="3" style="text-align: right;">Tổng Cộng:</td>
+                    <td><span class="amount">@Model.TotalAmount?.ToString("N0") ₫</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="status-update">
+            <h4>Cập Nhật Trạng Thái</h4>
+            <form method="post" action="/Administrator/Order/UpdateStatus/@Model.OrderId" class="status-form">
+                <select name="status" required>
+                    <option value="Pending" @(Model.OrderStatus == "Pending" ? "selected" : "")>Chờ Xử Lý</option>
+                    <option value="Processing" @(Model.OrderStatus == "Processing" ? "selected" : "")>Đang Xử Lý</option>
+                    <option value="Completed" @(Model.OrderStatus == "Completed" ? "selected" : "")>Hoàn Thành</option>
+                    <option value="Cancelled" @(Model.OrderStatus == "Cancelled" ? "selected" : "")>Hủy</option>
+                </select>
+                <button type="submit" class="btn-update">Cập Nhật</button>
+            </form>
+        </div>
+    </div>
+</div>

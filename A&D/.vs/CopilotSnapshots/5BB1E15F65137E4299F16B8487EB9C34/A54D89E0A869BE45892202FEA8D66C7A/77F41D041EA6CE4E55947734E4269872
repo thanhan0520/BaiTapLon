@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1 class="mb-4">
+    <i class="fas fa-tachometer-alt"></i> Dashboard
+</h1>
+
+<!-- Statistics Cards -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon text-primary">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div>
+                    <div class="stat-value">@ViewBag.TotalProducts</div>
+                    <div class="stat-label">Tổng Sản Phẩm</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon text-success">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div>
+                    <div class="stat-value">@string.Format("{0:N0}", ViewBag.TotalValue)</div>
+                    <div class="stat-label">Tổng Giá Trị Hàng</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="stat-icon text-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <div class="stat-value">@ViewBag.LowStockProducts</div>
+                    <div class="stat-label">Hàng Sắp Hết</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">Hành Động Nhanh</h5>
+    </div>
+    <div class="card-body">
+        <a href="@Url.Action("Create", "Home", new { area = "Admin" })" class="btn btn-primary me-2">
+            <i class="fas fa-plus-circle"></i> Thêm Sản Phẩm
+        </a>
+        <a href="@Url.Action("dashBoard", "Home", new { area = "Admin" })" class="btn btn-info">
+            <i class="fas fa-list"></i> Xem Danh Sách
+        </a>
+    </div>
+</div>

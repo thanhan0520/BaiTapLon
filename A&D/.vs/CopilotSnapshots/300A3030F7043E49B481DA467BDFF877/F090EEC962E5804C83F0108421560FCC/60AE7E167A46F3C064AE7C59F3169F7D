@@ -1,0 +1,40 @@
+﻿using HocDBFirst.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace HocDBFirst.Areas.Administrator.Controllers
+{
+    [Area("Administrator")]
+    public class PhongBanController : Controller
+    {
+        private readonly HumanManagementContext _dbContext;
+        public PhongBanController(HumanManagementContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public IActionResult Index()
+        {
+            IEnumerable<PhongBan> phongBans = _dbContext.PhongBans.ToList();
+            return View(phongBans);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(PhongBan phongBan)
+        {
+            if (ModelState.IsValid)
+            {
+                _dbContext.PhongBans.Add(new PhongBan()
+                {
+                    TenPb = phongBan.TenPb,
+                });
+                _dbContext.SaveChanges();
+                return Redirect("/Administrator/PhongBan/Index");
+
+            }
+            return View(phongBan);
+        }
+    }
+}

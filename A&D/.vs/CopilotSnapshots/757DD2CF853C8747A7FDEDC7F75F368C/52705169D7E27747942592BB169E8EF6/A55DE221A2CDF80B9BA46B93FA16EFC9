@@ -1,0 +1,1307 @@
+﻿@model IEnumerable<Milk>
+
+@{
+    ViewData["Title"] = "Trang Chủ";
+}
+
+<style>
+    :root {
+        --primary: #2d2d5f;
+        --primary-light: #3d3d7f;
+        --accent: #ffc107;
+        --danger: #ef4444;
+        --success: #10b981;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-600: #4b5563;
+        --gray-900: #111827;
+    }
+
+    /* Hero Carousel Section */
+    .hero-wrapper {
+        width: 100%;
+        background: linear-gradient(135deg, #f8d7da 0%, #e2b5c3 50%, #d4a5d4 100%);
+        padding: 2rem 1rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 2rem;
+        color: white;
+    }
+
+    .hero-text h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 900;
+        margin-bottom: 1rem;
+        line-height: 1.1;
+        color: #2d2d5f;
+        letter-spacing: -1px;
+    }
+
+    .hero-text p {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        margin-bottom: 0;
+        line-height: 1.6;
+        color: #555;
+        font-weight: 500;
+    }
+
+    .hero-images {
+        position: relative;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-showcase {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        gap: 1rem;
+    }
+
+    .showcase-item {
+        width: 120px;
+        height: 120px;
+        background: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .showcase-item:hover {
+        transform: translateY(-8px);
+    }
+
+    .showcase-item img {
+        width: 90%;
+        height: 90%;
+        object-fit: contain;
+    }
+
+    /* Features Section */
+    .features-section {
+        background: white;
+        padding: 3rem 1rem;
+        margin-bottom: 3rem;
+        border-radius: 10px;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .feature-card {
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+        color: #2d2d5f;
+        font-weight: 800;
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-card p {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    /* Product Grid */
+    .product-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding: 0;
+    }
+
+    .section-title {
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+        font-weight: 900;
+        color: #2d2d5f;
+        margin: 0;
+        position: relative;
+        display: inline-block;
+        padding: 0.5rem 2rem;
+        background: linear-gradient(120deg, transparent, rgba(255, 193, 7, 0.3), transparent);
+        letter-spacing: -0.5px;
+    }
+
+    .section-subtitle {
+        color: #666;
+        font-size: 0.95rem;
+        margin-top: 1rem;
+        font-weight: 500;
+    }
+
+    /* Products Grid */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    /* Product Card */
+    .product-card {
+        background: white;
+        border: none;
+        border-radius: 10px;
+        transition: all 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .product-card:hover {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+    }
+
+    .img-box {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: linear-gradient(135deg, #f0f0f0, #f8f8f8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        border-bottom: 3px solid #ffc107;
+    }
+
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 1rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 0.5rem;
+    }
+
+    .product-name {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #2d2d5f;
+        line-height: 1.3;
+        min-height: 2.6rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-brand {
+        display: inline-block;
+        background: linear-gradient(135deg, #ffc107, #ffb300);
+        color: white;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        width: fit-content;
+    }
+
+    .product-weight {
+        color: #999;
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+
+    .product-price-section {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+    }
+
+    .product-price {
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: #ef4444;
+    }
+
+    .product-stock {
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 0.25rem;
+    }
+
+    .stock-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .stock-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10b981;
+    }
+
+    .stock-dot.low {
+        background: #f59e0b;
+    }
+
+    .stock-dot.out {
+        background: #ef4444;
+    }
+
+    /* Add to Cart Button */
+    .btn-add {
+        background: linear-gradient(135deg, #2d2d5f, #3d3d7f);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: auto;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(45, 45, 95, 0.3);
+    }
+
+    .btn-add:hover:not(:disabled) {
+        background: linear-gradient(135deg, #1f1f45, #2d2d5f);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(45, 45, 95, 0.4);
+    }
+
+    .btn-add:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .btn-add:disabled {
+        background: linear-gradient(135deg, #d1d5db, #9ca3af);
+        cursor: not-allowed;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Empty State */
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #999;
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, rgba(45, 45, 95, 0.95), rgba(61, 61, 127, 0.95));
+        color: white;
+        padding: 3rem 1rem;
+        border-radius: 10px;
+        margin-bottom: 3rem;
+        text-align: center;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cta-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .cta-text h2 {
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 1rem;
+    }
+
+    .cta-text p {
+        font-size: 1rem;
+        opacity: 0.95;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .cta-button {
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid white;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+
+    .cta-button.primary {
+        background: #ffc107;
+        color: #2d2d5f;
+        border-color: #ffc107;
+    }
+
+    .cta-button.primary:hover {
+        background: #ffb300;
+        border-color: #ffb300;
+    }
+
+    .cta-button.secondary {
+        background: transparent;
+        color: white;
+    }
+
+    .cta-button.secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .cta-image {
+        display: flex;
+        justify-content: center;
+    }
+
+    .cta-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .hero-content {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .hero-images {
+            height: 300px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+        }
+
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .cta-content {
+            grid-template-columns: 1fr;
+        }
+
+        .cta-buttons {
+            justify-content: center;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .products-grid {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .product-card {
+            border-radius: 8px;
+        }
+
+        .btn-add {
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .feature-card {
+            padding: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1rem;
+        }
+
+        .hero-images {
+            height: 250px;
+        }
+
+        .showcase-item {
+            width: 90px;
+            height: 90px;
+        }
+
+        .cta-section {
+            padding: 2rem 1rem;
+        }
+
+        .cta-text h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<!-- Hero Section with Carousel -->
+<div class="hero-wrapper">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>A_D</h1>
+            <h2 style="font-size: 1.3rem; color: #2d2d5f; font-weight: 700; margin-bottom: 0.5rem;">Khác Biệt Của Sự Thiểu Hụt</h2>
+            <p>Những sản phẩm sữa tốt nhất cho sức khỏe gia đình bạn</p>
+        </div>
+        <div class="hero-images">
+            <div class="product-showcase">
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model.Take(4))
+                    {
+                        <div class="showcase-item">
+                            @if (!string.IsNullOrEmpty(item.ImagePath))
+                            {
+                                <img src="@item.ImagePath" alt="@item.MilkName" />
+                            }
+                            else
+                            {
+                                <span style="font-size: 2rem;">🥛</span>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">💪</div>
+            <h3>Khỏe Mạnh</h3>
+            <p>Cung cấp dinh dưỡng đầy đủ cho gia đình bạn</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Trí Tuệ</h3>
+            <p>Hỗ trợ phát triển trí tuệ toàn diện</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h3>Kiên Cường</h3>
+            <p>Tăng cường sức đề kháng tự nhiên</p>
+        </div>
+    </div>
+</div>
+
+<!-- Products Section -->
+<div class="product-wrapper">
+    <div class="section-header">
+        <h2 class="section-title">Sản Phẩm Của A_D</h2>
+    </div>
+    <p class="section-subtitle">Khám phá bộ sưu tập sữa chất lượng cao của chúng tôi</p>
+
+    @if (Model.Any())
+    {
+        <div class="products-grid">
+            @foreach (var item in Model)
+            {
+                <div class="product-card">
+                    <div class="img-box">
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="@item.ImagePath" alt="@item.MilkName" class="product-img" loading="lazy" />
+                        }
+                        else
+                        {
+                            <div style="font-size: 3rem;">🥛</div>
+                        }
+                    </div>
+
+                    <div class="card-body">
+                        <div class="product-name">@item.MilkName</div>
+                        <div class="product-brand">@item.Brand</div>
+
+                        @if (!string.IsNullOrEmpty(item.Weight))
+                        {
+                            <div class="product-weight">@item.Weight</div>
+                        }
+
+                        <div class="product-price-section">
+                            <span class="product-price">@String.Format("{0:N0}", item.Price) đ</span>
+                        </div>
+
+                        <div class="stock-status">
+                            @if (item.StockQuantity > 10)
+                            {
+                                <span class="stock-dot"></span>
+                                <span>Còn: @item.StockQuantity</span>
+                            }
+                            else if (item.StockQuantity > 0)
+                            {
+                                <span class="stock-dot low"></span>
+                                <span>Còn: @item.StockQuantity</span>
+                            }
+                            else
+                            {
+                                <span class="stock-dot out"></span>
+                                <span>Hết hàng</span>
+                            }
+                        </div>
+
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                            <input type="hidden" name="id" value="@item.MilkId" />
+                            <button type="submit" class="btn-add w-100" @(item.StockQuantity <= 0 ? "disabled" : "")>
+                                @(item.StockQuantity > 0 ? "🛒 Thêm Vào Giỏ" : "Hết Hàng")
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="products-grid">
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <h3>Không có sản phẩm</h3>
+                <p>Vui lòng quay lại sau</p>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- CTA Section -->
+<div class="cta-section">
+    <div class="cta-content">
+        <div class="cta-text">
+            <h2>Đặt Mua Sản Phẩm A_D</h2>
+            <p>A_D được phối hợp qua hệ thống hiện đại, tiện lợi, cung cấp trực tiếp các thực phẩm dinh dưỡng chất lượng cao từ những trang trại được kiểm định</p>
+            <div class="cta-buttons">
+                <a href="#" class="cta-button primary">Liên Hệ Ngay</a>
+                <a href="#" class="cta-button secondary">Tìm Cửa Hàng</a>
+            </div>
+        </div>
+        <div class="cta-image">
+            <span style="font-size: 8rem;">🏪</span>
+        </div>
+    </div>
+</div>
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --primary-light: #818cf8;
+        --danger: #ef4444;
+        --success: #10b981;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-600: #4b5563;
+        --gray-900: #111827;
+    }
+
+    /* Hero Section */
+    .hero-wrapper {
+        width: 100%;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        padding: 3.5rem 1rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25);
+        animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @@keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero-wrapper::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+        transform: translate(50%, -50%);
+    }
+
+    .hero-wrapper::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 250px;
+        height: 250px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+        transform: translate(-50%, 50%);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        text-align: center;
+        color: white;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(1.75rem, 5vw, 2.8rem);
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+        line-height: 1.15;
+        color: white;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        letter-spacing: -0.5px;
+    }
+
+    .hero-content p {
+        font-size: clamp(0.95rem, 2vw, 1.15rem);
+        opacity: 0.98;
+        margin-bottom: 0;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 500;
+    }
+
+    /* Product Grid */
+    .product-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+        padding: 0 0.5rem;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .section-title {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        font-weight: 800;
+        color: var(--gray-900);
+        margin: 0;
+        position: relative;
+        padding-bottom: 0.75rem;
+        letter-spacing: -0.5px;
+    }
+
+    .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 70px;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        border-radius: 3px;
+        transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .section-header:hover .section-title::after {
+        width: 100px;
+    }
+
+    .section-subtitle {
+        color: var(--gray-600);
+        font-size: 0.9rem;
+        margin-left: auto;
+    }
+
+    /* Products Grid */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    @@media (max-width: 1200px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.25rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+    }
+
+    /* Product Card */
+    .product-card {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 0.875rem;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .product-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 10;
+    }
+
+    .product-card:hover {
+        border-color: var(--primary);
+        box-shadow: 0 16px 32px rgba(99, 102, 241, 0.2);
+        transform: translateY(-6px);
+    }
+
+    .product-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .img-box {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .img-box::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
+        pointer-events: none;
+    }
+
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .product-card:hover .product-img {
+        transform: scale(1.12) rotate(0.5deg);
+    }
+
+    .no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-400);
+        font-size: 0.85rem;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    /* Card Body */
+    .card-body {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 0.5rem;
+    }
+
+    .product-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--gray-900);
+        line-height: 1.3;
+        min-height: 2.6rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-brand {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary-light), var(--primary));
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .product-weight {
+        color: var(--gray-600);
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+
+    .product-price-section {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+    }
+
+    .product-price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--danger), #dc2626);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .product-stock {
+        font-size: 0.8rem;
+        color: var(--gray-600);
+        margin-top: 0.25rem;
+    }
+
+    .stock-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .stock-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--success);
+    }
+
+    .stock-dot.low {
+        background: #f59e0b;
+    }
+
+    .stock-dot.out {
+        background: var(--danger);
+    }
+
+    /* Add to Cart Button */
+    .btn-add {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.625rem;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        margin-top: auto;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-add::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-add:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-add:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-add:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-add:disabled {
+        background: linear-gradient(135deg, #d1d5db, #9ca3af);
+        cursor: not-allowed;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-add:disabled:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Empty State */
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--gray-600);
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    /* Responsive */
+    @@media (max-width: 576px) {
+        .hero-wrapper {
+            padding: 2.5rem 1rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+        }
+
+        .hero-content h1 {
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .hero-content p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            width: 100%;
+        }
+
+        .section-title::after {
+            width: 50px;
+        }
+
+        .section-subtitle {
+            display: none;
+        }
+
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-card {
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.15);
+        }
+
+        .product-name {
+            font-size: 0.85rem;
+            min-height: 2.4rem;
+        }
+
+        .product-brand {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.6rem;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+        }
+
+        .product-weight {
+            font-size: 0.75rem;
+        }
+
+        .stock-status {
+            font-size: 0.75rem;
+        }
+
+        .card-body {
+            padding: 0.75rem;
+            gap: 0.35rem;
+        }
+
+        .btn-add {
+            padding: 0.6rem 0.8rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+            border-radius: 0.5rem;
+        }
+
+        .img-box {
+            aspect-ratio: 1 / 1;
+        }
+    }
+
+    @@media (min-width: 577px) and (max-width: 768px) {
+        .products-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .hero-wrapper {
+            padding: 3rem 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .card-body {
+            padding: 0.85rem;
+        }
+
+        .btn-add {
+            padding: 0.65rem 1rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    @@media (min-width: 769px) and (max-width: 1024px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+        }
+
+        .hero-wrapper {
+            padding: 3.25rem 1.5rem;
+            margin-bottom: 3rem;
+        }
+    }
+
+    @@media (min-width: 1025px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            border-radius: 0.875rem;
+        }
+    }
+</style>
+
+<!-- Hero Section - Full Width -->
+<div class="hero-wrapper">
+    <div class="hero-content">
+        <h1>🥛 Sữa Tươi Chất Lượng Cao</h1>
+        <p>Những sản phẩm sữa tốt nhất cho sức khỏe gia đình bạn</p>
+    </div>
+</div>
+
+<!-- Products Section -->
+<div class="container product-wrapper">
+    <div class="section-header">
+        <h2 class="section-title">Sản Phẩm Gợi Ý</h2>
+        <span class="section-subtitle">@Model.Count() sản phẩm</span>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="products-grid">
+            @foreach (var item in Model)
+            {
+                <div class="product-card">
+
+                    <!-- Image Box -->
+                    <div class="img-box">
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="@item.ImagePath" alt="@item.MilkName" class="product-img" loading="lazy" />
+                        }
+                        else
+                        {
+                            <div class="no-image">
+                                <span>📦 Không có ảnh</span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+
+                        <!-- Product Name -->
+                        <div class="product-name">@item.MilkName</div>
+
+                        <!-- Brand Badge -->
+                        <div class="product-brand">@item.Brand</div>
+
+                        <!-- Weight -->
+                        @if (!string.IsNullOrEmpty(item.Weight))
+                        {
+                            <div class="product-weight">📏 @item.Weight</div>
+                        }
+
+                        <!-- Price -->
+                        <div class="product-price-section">
+                            <span class="product-price">@String.Format("{0:N0}", item.Price) đ</span>
+                        </div>
+
+                        <!-- Stock Status -->
+                        <div class="stock-status">
+                            @if (item.StockQuantity > 10)
+                            {
+                                <span class="stock-dot"></span>
+                                <span>Còn: @item.StockQuantity</span>
+                            }
+                            else if (item.StockQuantity > 0)
+                            {
+                                <span class="stock-dot low"></span>
+                                <span>Còn: @item.StockQuantity</span>
+                            }
+                            else
+                            {
+                                <span class="stock-dot out"></span>
+                                <span>Hết hàng</span>
+                            }
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                            <input type="hidden" name="id" value="@item.MilkId" />
+                            <button type="submit" class="btn-add w-100" @(item.StockQuantity <= 0 ? "disabled" : "")>
+                                @(item.StockQuantity > 0 ? "🛒 Thêm Vào Giỏ" : "Hết Hàng")
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="products-grid">
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <h3>Không có sản phẩm</h3>
+                <p>Vui lòng quay lại sau</p>
+            </div>
+        </div>
+    }
+
+</div>

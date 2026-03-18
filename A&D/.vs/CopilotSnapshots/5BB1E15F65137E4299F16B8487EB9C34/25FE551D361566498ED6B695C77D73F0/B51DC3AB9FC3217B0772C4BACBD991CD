@@ -1,0 +1,92 @@
+﻿@model A_D.Models.Milk
+
+@{
+    ViewData["Title"] = "Sửa Sản Phẩm";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Cập Nhật Thông Tin Sản Phẩm</h5>
+
+                <form method="post" novalidate>
+                    <input type="hidden" name="MilkId" value="@Model.MilkId" />
+
+                    <div class="row mb-3">
+                        <label for="MilkName" class="col-sm-2 col-form-label">Tên Sữa <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="MilkName" name="MilkName" class="form-control" value="@Model.MilkName" placeholder="Nhập tên sản phẩm" required />
+                            @Html.ValidationMessageFor(m => m.MilkName, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="Brand" class="col-sm-2 col-form-label">Hãng <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Brand" name="Brand" class="form-control" value="@Model.Brand" placeholder="Nhập tên hãng" required />
+                            @Html.ValidationMessageFor(m => m.Brand, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="Weight" class="col-sm-2 col-form-label">Trọng Lượng <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="Weight" name="Weight" class="form-control" value="@Model.Weight" placeholder="VD: 200ml, 1kg" required />
+                            @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="Price" class="col-sm-2 col-form-label">Giá <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="number" id="Price" name="Price" class="form-control" value="@Model.Price" placeholder="0" step="0.01" min="0" required />
+                            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="StockQuantity" class="col-sm-2 col-form-label">Số Lượng <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="number" id="StockQuantity" name="StockQuantity" class="form-control" value="@Model.StockQuantity" placeholder="0" min="0" required />
+                            @Html.ValidationMessageFor(m => m.StockQuantity, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="ExpiryDate" class="col-sm-2 col-form-label">Hạn SD <span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="date" id="ExpiryDate" name="ExpiryDate" class="form-control" value="@Model.ExpiryDate.ToString("yyyy-MM-dd")" required />
+                            @Html.ValidationMessageFor(m => m.ExpiryDate, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="ImagePath" class="col-sm-2 col-form-label">Ảnh (Tuỳ Chọn)</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="ImagePath" name="ImagePath" class="form-control" value="@Model.ImagePath" placeholder="/images/milk-product.jpg" />
+                        </div>
+                    </div>
+
+                    @if (!ViewData.ModelState.IsValid && ModelState.Keys.Count > 0)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-circle"></i> Vui lòng kiểm tra lại dữ liệu nhập vào.
+                        </div>
+                    }
+
+                    <div class="row mb-0">
+                        <div class="col-sm-10 offset-sm-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Cập Nhật
+                            </button>
+                            <a href="@Url.Action("dashBoard", "Home", new { area = "Admin" })" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Hủy
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

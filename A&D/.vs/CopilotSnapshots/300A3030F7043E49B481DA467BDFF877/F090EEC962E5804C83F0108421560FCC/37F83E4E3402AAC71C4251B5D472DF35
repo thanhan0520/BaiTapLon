@@ -1,0 +1,14 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using A_D.Models;
+
+namespace A_D.Areas.Administrator.Controllers
+{
+    [Area("Administrator")]
+    public class PhongBanController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+}

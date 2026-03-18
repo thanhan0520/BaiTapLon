@@ -1,0 +1,78 @@
+﻿@model IEnumerable<A_D.Models.Milk>
+
+@{
+    ViewData["Title"] = "Danh Sách Sản Phẩm";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-list"></i> Danh Sách Sản Phẩm</h1>
+    <a href="@Url.Action("Create", "Home", new { area = "Admin" })" class="btn btn-primary">
+        <i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới
+    </a>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Tên Sữa</th>
+                    <th>Hãng</th>
+                    <th>Trọng Lượng</th>
+                    <th>Giá</th>
+                    <th>Tồn Kho</th>
+                    <th>Hạn Sử Dụng</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><strong>@item.MilkId</strong></td>
+                        <td>@item.MilkName</td>
+                        <td>@item.Brand</td>
+                        <td>@item.Weight</td>
+                        <td>
+                            <span class="badge bg-success">@string.Format("{0:C}", item.Price)</span>
+                        </td>
+                        <td>
+                            @if (item.StockQuantity < 5)
+                            {
+                                <span class="badge bg-danger">@item.StockQuantity</span>
+                            }
+                            else if (item.StockQuantity < 10)
+                            {
+                                <span class="badge bg-warning">@item.StockQuantity</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info">@item.StockQuantity</span>
+                            }
+                        </td>
+                        <td>@item.ExpiryDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Home", new { area = "Admin", id = item.MilkId })" 
+                               class="btn btn-sm btn-warning" title="Sửa">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="@Url.Action("Delete", "Home", new { area = "Admin", id = item.MilkId })" 
+                               class="btn btn-sm btn-danger" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info mt-4" role="alert">
+        <i class="fas fa-info-circle"></i> Không có sản phẩm nào. 
+        <a href="@Url.Action("Create", "Home", new { area = "Admin" })">Thêm sản phẩm mới</a>
+    </div>
+}

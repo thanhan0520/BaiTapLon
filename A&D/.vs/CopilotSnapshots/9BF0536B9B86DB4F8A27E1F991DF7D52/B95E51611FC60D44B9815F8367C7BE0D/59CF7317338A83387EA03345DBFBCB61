@@ -1,0 +1,214 @@
+﻿@{
+    ViewData["Title"] = "Tổng Quan Hồ Sơ";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .profile-header {
+        background: white;
+        padding: 30px;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 0;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        margin: 0 auto 20px;
+        overflow: hidden;
+        object-fit: cover;
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 10px 0;
+        color: #333;
+    }
+
+    .profile-role {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .profile-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+        padding: 0 20px;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .profile-tabs a {
+        padding: 15px 20px;
+        text-decoration: none;
+        color: #666;
+        border-bottom: 3px solid transparent;
+        transition: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .profile-tabs a:hover {
+        color: #6366f1;
+    }
+
+    .profile-tabs a.active {
+        color: #6366f1;
+        border-bottom-color: #6366f1;
+    }
+
+    .profile-content {
+        background: white;
+        padding: 30px;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .info-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #666;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .info-value {
+        color: #333;
+        font-size: 1.1rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn-action {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 0;
+        text-decoration: none;
+        cursor: pointer;
+        transition: none;
+        flex: 1;
+        text-align: center;
+    }
+
+    .btn-action:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .btn-secondary {
+        background: #e5e7eb;
+        color: #333;
+    }
+
+    @@media (max-width: 768px) {
+        .info-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .profile-tabs {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatarOverview">
+            <i class="bi bi-person"></i>
+        </div>
+        <div class="profile-name">Admin User</div>
+        <div class="profile-role">Quản Trị Viên</div>
+    </div>
+
+    <div class="profile-tabs">
+        <a href="/Administrator/Profile/Overview" class="active">
+            <i class="bi bi-person"></i>
+            <span>Tổng Quan</span>
+        </a>
+        <a href="/Administrator/Profile/Edit">
+            <i class="bi bi-pencil"></i>
+            <span>Chỉnh Sửa</span>
+        </a>
+        <a href="/Administrator/Profile/Settings">
+            <i class="bi bi-gear"></i>
+            <span>Cài Đặt</span>
+        </a>
+        <a href="/Administrator/Profile/ChangePassword">
+            <i class="bi bi-key"></i>
+            <span>Mật Khẩu</span>
+        </a>
+    </div>
+
+    <div class="profile-content">
+        <h2>Thông Tin Tài Khoản</h2>
+        
+        <div class="info-grid">
+            <div class="info-group">
+                <span class="info-label">Tên Đăng Nhập</span>
+                <span class="info-value">admin</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Email</span>
+                <span class="info-value">admin@example.com</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Vai Trò</span>
+                <span class="info-value">Quản Trị Viên</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Ngày Tạo Tài Khoản</span>
+                <span class="info-value">01/01/2024</span>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/Administrator/Profile/Edit" class="btn-action">Chỉnh Sửa Hồ Sơ</a>
+            <a href="/Administrator/Profile/ChangePassword" class="btn-action btn-secondary">Đổi Mật Khẩu</a>
+        </div>
+    </div>
+</div>

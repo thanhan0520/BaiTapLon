@@ -1,0 +1,25 @@
+﻿@model PhongBan
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<div class="pagetitle">
+    <h1>Add New Phong ban</h1>
+</div>
+<section class="section">
+    <form action="/Administrator/PhongBan/Create" method="post">
+        <div class="my-2">
+            <label asp-for="MaPb"></label>
+            <input asp-for="MaPb" class="form-control" />
+            <span asp-validation-for="MaPb" class="text-danger"></span>
+        </div>
+        <div class="my-2">
+            <label asp-for="TenPb"></label>
+            <input asp-for="TenPb" class="form-control" />
+            <span asp-validation-for="TenPb" class="text-danger"></span>
+        </div>
+        <button class="btn btn-primary mt-2">Add new room</button>
+    </form>
+</section>
+

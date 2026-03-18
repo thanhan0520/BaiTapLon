@@ -1,0 +1,93 @@
+﻿@model A_D.Models.Milk
+
+@{
+    ViewData["Title"] = "Sửa Sản Phẩm";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1 class="mb-4">
+            <i class="fas fa-edit"></i> @ViewData["Title"]
+        </h1>
+         
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Cập Nhật Thông Tin Sản Phẩm</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    <input type="hidden" name="MilkId" value="@Model.MilkId" />
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="MilkName">Tên Sữa <span class="text-danger">*</span></label>
+                            <input type="text" id="MilkName" name="MilkName" class="form-control" 
+                                   value="@Model.MilkName" placeholder="Nhập tên sản phẩm" required />
+                            @Html.ValidationMessageFor(m => m.MilkName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="Brand">Hãng <span class="text-danger">*</span></label>
+                            <input type="text" id="Brand" name="Brand" class="form-control" 
+                                   value="@Model.Brand" placeholder="Nhập tên hãng" required />
+                            @Html.ValidationMessageFor(m => m.Brand, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="Weight">Trọng Lượng <span class="text-danger">*</span></label>
+                            <input type="text" id="Weight" name="Weight" class="form-control" 
+                                   value="@Model.Weight" placeholder="VD: 200ml, 1kg" required />
+                            @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="Price">Giá <span class="text-danger">*</span></label>
+                            <input type="number" id="Price" name="Price" class="form-control" 
+                                   value="@Model.Price" placeholder="0" step="0.01" min="0" required />
+                            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="StockQuantity">Số Lượng Tồn <span class="text-danger">*</span></label>
+                            <input type="number" id="StockQuantity" name="StockQuantity" class="form-control" 
+                                   value="@Model.StockQuantity" placeholder="0" min="0" required />
+                            @Html.ValidationMessageFor(m => m.StockQuantity, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="ExpiryDate">Hạn Sử Dụng <span class="text-danger">*</span></label>
+                            <input type="date" id="ExpiryDate" name="ExpiryDate" class="form-control" 
+                                   value="@Model.ExpiryDate.ToString("yyyy-MM-dd")" required />
+                            @Html.ValidationMessageFor(m => m.ExpiryDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="ImagePath">Đường Dẫn Ảnh (Tuỳ Chọn)</label>
+                        <input type="text" id="ImagePath" name="ImagePath" class="form-control" value="@Model.ImagePath" placeholder="/images/milk-product.jpg" />
+                    </div>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle"></i> Vui lòng kiểm tra lại dữ liệu nhập vào.
+                        </div>
+                    }
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="@Url.Action("dashBoard", "Home", new { area = "Admin" })" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Hủy
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Cập Nhật
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

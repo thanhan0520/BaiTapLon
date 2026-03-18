@@ -1,0 +1,36 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using A_D.Models;
+
+namespace A_D.Areas.Administrator.Controllers
+{
+    [Area("Administrator")]
+    public class ProfileController : Controller
+    {
+        private readonly QuanLiBanSuaContext _dbContext;
+
+        public ProfileController(QuanLiBanSuaContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public IActionResult Overview()
+        {
+            return View();
+        }
+
+        public IActionResult Edit()
+        {
+            return View();
+        }
+
+        public IActionResult Settings()
+        {
+            return View();
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+    }
+}

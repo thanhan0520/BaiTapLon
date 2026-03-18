@@ -1,0 +1,93 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using A_D.Models;
+using A_D.Areas.Admin.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace A_D.Areas.Admin.Controllers;
+
+[Area("Admin")]
+public class OrderController : Controller
+{
+    private readonly QuanLiBanSuaContext _context;
+    private const int PageSize = 10;
+
+    public OrderController(QuanLiBanSuaContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<IActionResult> Index(string? searchTerm, int pageIndex = 1)
+    {
+        var query = _context.Orders.Include(o => o.User).AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(o => o.OrderId.ToString().Contains(searchTerm) || 
+                                      o.User.UserName.Contains(searchTerm));
+        }
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .OrderByDescending(o => o.OrderDate)
+            .Skip((pageIndex - 1) * PageSize)
+            .Take(PageSize)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var paginatedList = new PaginatedList<Order>(items, totalCount, pageIndex, PageSize, searchTerm);
+        return View(paginatedList);
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var order = await _context.Orders
+            .Include(o => o.User)
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Milk)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(o => o.OrderId == id);
+
+        if (order == null)
+        {
+            TempData["ErrorMessage"] = "Đơn hàng không tồn tại!";
+            return RedirectToAction(nameof(Index));
+        }
+        return View(order);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateStatus(int id, string status)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null)
+        {
+            TempData["ErrorMessage"] = "Đơn hàng không tồn tại!";
+            return RedirectToAction(nameof(Index));
+        }
+
+        order.Status = status;
+        _context.Update(order);
+        await _context.SaveChangesAsync();
+        TempData["SuccessMessage"] = "Cập nhật trạng thái đơn hàng thành công!";
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order != null)
+        {
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Xóa đơn hàng thành công!";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Đơn hàng không tồn tại!";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+}

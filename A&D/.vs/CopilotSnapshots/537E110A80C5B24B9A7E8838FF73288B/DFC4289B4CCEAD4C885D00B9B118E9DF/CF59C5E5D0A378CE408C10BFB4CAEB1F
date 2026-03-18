@@ -1,0 +1,137 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using A_D.Models;
+using A_D.Areas.Admin.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace A_D.Areas.Admin.Controllers;
+
+[Area("Admin")]
+public class MilkController : Controller
+{
+    private readonly QuanLiBanSuaContext _context;
+    private const int PageSize = 10;
+
+    public MilkController(QuanLiBanSuaContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<IActionResult> Index(string? searchTerm, int pageIndex = 1)
+    {
+        var query = _context.Milks.AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(m => m.MilkName.Contains(searchTerm) || m.Brand.Contains(searchTerm));
+        }
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .OrderByDescending(m => m.MilkId)
+            .Skip((pageIndex - 1) * PageSize)
+            .Take(PageSize)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var paginatedList = new PaginatedList<Milk>(items, totalCount, pageIndex, PageSize, searchTerm);
+        return View(paginatedList);
+    }
+
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Milk milk)
+    {
+        if (ModelState.IsValid)
+        {
+            _context.Add(milk);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
+            return RedirectToAction(nameof(Index));
+        }
+        return View(milk);
+    }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var milk = await _context.Milks.FindAsync(id);
+        if (milk == null)
+        {
+            TempData["ErrorMessage"] = "Sản phẩm không tồn tại!";
+            return RedirectToAction(nameof(Index));
+        }
+        return View(milk);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Milk milk)
+    {
+        if (id != milk.MilkId)
+        {
+            TempData["ErrorMessage"] = "ID không hợp lệ!";
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(milk);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Cập nhật sản phẩm thành công!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                TempData["ErrorMessage"] = "Lỗi cập nhật dữ liệu!";
+                return View(milk);
+            }
+        }
+        return View(milk);
+    }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        var milk = await _context.Milks.FindAsync(id);
+        if (milk == null)
+        {
+            TempData["ErrorMessage"] = "Sản phẩm không tồn tại!";
+            return RedirectToAction(nameof(Index));
+        }
+        return View(milk);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var milk = await _context.Milks.FindAsync(id);
+        if (milk != null)
+        {
+            _context.Milks.Remove(milk);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Xóa sản phẩm thành công!";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Sản phẩm không tồn tại!";
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var milk = await _context.Milks.AsNoTracking().FirstOrDefaultAsync(m => m.MilkId == id);
+        if (milk == null)
+        {
+            TempData["ErrorMessage"] = "Sản phẩm không tồn tại!";
+            return RedirectToAction(nameof(Index));
+        }
+        return View(milk);
+    }
+}

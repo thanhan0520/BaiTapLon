@@ -1,0 +1,151 @@
+﻿@model Milk
+
+@{
+    ViewData["Title"] = "Sửa Sản Phẩm";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 30px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(99,102,241,0.3);
+    }
+
+    .btn-cancel {
+        background: #e5e7eb;
+        color: #333;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .image-preview {
+        max-width: 200px;
+        margin: 10px 0;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="form-container">
+    <h1>✏️ Sửa Sản Phẩm</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <input type="hidden" asp-for="MilkId">
+
+        <div class="form-group">
+            <label asp-for="MilkName">Tên Sản Phẩm</label>
+            <input asp-for="MilkName" required>
+            <span asp-validation-for="MilkName" class="text-danger"></span>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="Brand">Thương Hiệu</label>
+                <input asp-for="Brand" required>
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Weight">Khối Lượng</label>
+                <input asp-for="Weight" required>
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="Price">Giá (đ)</label>
+                <input asp-for="Price" type="number" step="1000" required>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StockQuantity">Số Lượng Kho</label>
+                <input asp-for="StockQuantity" type="number" required>
+                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ExpiryDate">Hạn Sử Dụng</label>
+            <input asp-for="ExpiryDate" type="datetime-local" required>
+            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <label>Hình ảnh hiện tại:</label>
+                <br>
+                <img src="@Model.ImagePath" alt="@Model.MilkName" class="image-preview">
+            }
+            <label>Thay đổi hình ảnh (nếu cần)</label>
+            <input type="file" name="imageFile" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn-submit">Cập Nhật Sản Phẩm</button>
+        <a href="/Administrator/Milk/Index" class="btn-cancel">Hủy</a>
+    </form>
+</div>

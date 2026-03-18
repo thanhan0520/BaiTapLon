@@ -1,0 +1,13 @@
+﻿@{
+    // Chỉ apply layout nếu không phải Admin area
+    string? area = ViewContext.RouteData.Values["area"]?.ToString();
+
+    if (string.IsNullOrEmpty(area))
+    {
+        Layout = "_Layout";
+    }
+    else if (area.ToLower() == "admin")
+    {
+        Layout = null; // Admin area sẽ dùng _ViewStart của riêng nó
+    }
+}

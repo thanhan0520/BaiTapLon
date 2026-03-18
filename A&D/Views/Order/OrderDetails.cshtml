@@ -1,0 +1,251 @@
+﻿@model Order
+
+@{
+    ViewData["Title"] = "Chi Tiết Đơn Hàng";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    }
+
+    .order-detail-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    .detail-card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+
+    .order-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    .info-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: #666;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        width: fit-content;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .status-processing {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-completed {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .items-section {
+        margin-bottom: 30px;
+    }
+
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .items-table thead {
+        background: #f9fafb;
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    .items-table th {
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .items-table td {
+        padding: 15px 12px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .items-table tbody tr:hover {
+        background: #f9fafb;
+    }
+
+    .total-row {
+        background: #f3f4f6;
+        font-weight: 700;
+    }
+
+    .product-info {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .product-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .product-name {
+        font-weight: 600;
+    }
+
+    .price-column,
+    .qty-column,
+    .total-column {
+        text-align: right;
+        color: #047857;
+        font-weight: 600;
+    }
+
+    .summary-section {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 0.95rem;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #047857;
+        padding-top: 10px;
+        border-top: 1px solid #e5e7eb;
+        margin-top: 10px;
+    }
+
+    .btn-back {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-block;
+    }
+
+    .btn-back:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(99,102,241,0.3);
+    }
+</style>
+
+<div class="order-detail-container">
+    <a href="/Order/MyOrders" class="btn-back">← Quay Lại Đơn Hàng</a>
+
+    <div class="detail-card">
+        <div class="order-header">
+            <div class="info-group">
+                <span class="info-label">Mã Đơn Hàng</span>
+                <span class="info-value">#@Model.OrderId</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Ngày Đặt</span>
+                <span class="info-value">@Model.OrderDate?.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Trạng Thái</span>
+                @{
+                    var statusClass = Model.OrderStatus?.ToLower() switch
+                    {
+                        "pending" => "status-pending",
+                        "processing" => "status-processing",
+                        "completed" => "status-completed",
+                        "cancelled" => "status-cancelled",
+                        _ => "status-pending"
+                    };
+                }
+                <span class="status-badge @statusClass">@Model.OrderStatus</span>
+            </div>
+        </div>
+
+        <div class="items-section">
+            <h3>📋 Chi Tiết Sản Phẩm</h3>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Sản Phẩm</th>
+                        <th>Giá</th>
+                        <th>Số Lượng</th>
+                        <th>Thành Tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderItems ?? new List<OrderItem>())
+                    {
+                        <tr>
+                            <td>
+                                <div class="product-info">
+                                    @if (!string.IsNullOrEmpty(item.Milk?.ImagePath))
+                                    {
+                                        <img src="@item.Milk.ImagePath" alt="@item.Milk.MilkName" class="product-image">
+                                    }
+                                    <span class="product-name">@item.Milk?.MilkName</span>
+                                </div>
+                            </td>
+                            <td class="price-column">@item.Price?.ToString("N0") ₫</td>
+                            <td class="qty-column">@item.Quantity</td>
+                            <td class="total-column">@((item.Price ?? 0) * (item.Quantity ?? 1)).ToString("N0") ₫</td>
+                        </tr>
+                    }
+                    <tr class="total-row">
+                        <td colspan="3" style="text-align: right;">Tổng Cộng:</td>
+                        <td class="total-column">@Model.TotalAmount?.ToString("N0") ₫</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

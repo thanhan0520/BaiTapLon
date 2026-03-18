@@ -1,0 +1,80 @@
+﻿@model A_D.Models.Milk
+
+@{
+    ViewData["Title"] = "Xóa Sản Phẩm";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i> Xác Nhận Xóa
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <strong>Cảnh báo!</strong> Bạn sắp xóa sản phẩm này vĩnh viễn. Hành động này không thể hoàn tác.
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label"><strong>Tên Sữa:</strong></label>
+                    <div class="col-sm-8">
+                        @Model.MilkName
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label"><strong>Hãng:</strong></label>
+                    <div class="col-sm-8">
+                        @Model.Brand
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label"><strong>Trọng Lượng:</strong></label>
+                    <div class="col-sm-8">
+                        @Model.Weight
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label"><strong>Giá:</strong></label>
+                    <div class="col-sm-8">
+                        <span class="badge bg-success">@string.Format("{0:N0}", Model.Price) đ</span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label"><strong>Tồn Kho:</strong></label>
+                    <div class="col-sm-8">
+                        @Model.StockQuantity
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <label class="col-sm-4 col-form-label"><strong>Hạn SD:</strong></label>
+                    <div class="col-sm-8">
+                        @Model.ExpiryDate.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+
+                <form method="post" action="@Url.Action("Delete", "Home", new { area = "Admin", id = Model.MilkId })" style="display: inline;">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="col-sm-8 offset-sm-4">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Xóa Sản Phẩm
+                            </button>
+                            <a href="@Url.Action("dashBoard", "Home", new { area = "Admin" })" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Hủy
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

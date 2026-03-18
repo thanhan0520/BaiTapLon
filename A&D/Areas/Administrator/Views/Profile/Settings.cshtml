@@ -1,0 +1,306 @@
+﻿@{
+    ViewData["Title"] = "Cài Đặt";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .profile-header {
+        background: white;
+        padding: 30px;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 0;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        margin: 0 auto 20px;
+    }
+
+    .profile-name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 10px 0;
+        color: #333;
+    }
+
+    .profile-role {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .profile-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+        padding: 0 20px;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .profile-tabs a {
+        padding: 15px 20px;
+        text-decoration: none;
+        color: #666;
+        border-bottom: 3px solid transparent;
+        transition: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .profile-tabs a:hover {
+        color: #6366f1;
+    }
+
+    .profile-tabs a.active {
+        color: #6366f1;
+        border-bottom-color: #6366f1;
+    }
+
+    .profile-content {
+        background: white;
+        padding: 30px;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .settings-section {
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .settings-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .settings-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .settings-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .settings-item:last-child {
+        border-bottom: none;
+    }
+
+    .settings-label {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .settings-description {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.3s;
+        border-radius: 0;
+    }
+
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.3s;
+    }
+
+    input:checked + .toggle-slider {
+        background-color: #6366f1;
+    }
+
+    input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .btn-action {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 0;
+        text-decoration: none;
+        cursor: pointer;
+        transition: none;
+        flex: 1;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .btn-action:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    @@media (max-width: 768px) {
+        .settings-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .profile-tabs {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <i class="bi bi-person"></i>
+        </div>
+        <div class="profile-name">Admin User</div>
+        <div class="profile-role">Quản Trị Viên</div>
+    </div>
+
+    <div class="profile-tabs">
+        <a href="/Administrator/Profile/Overview">
+            <i class="bi bi-person"></i>
+            <span>Tổng Quan</span>
+        </a>
+        <a href="/Administrator/Profile/Edit">
+            <i class="bi bi-pencil"></i>
+            <span>Chỉnh Sửa</span>
+        </a>
+        <a href="/Administrator/Profile/Settings" class="active">
+            <i class="bi bi-gear"></i>
+            <span>Cài Đặt</span>
+        </a>
+        <a href="/Administrator/Profile/ChangePassword">
+            <i class="bi bi-key"></i>
+            <span>Mật Khẩu</span>
+        </a>
+    </div>
+
+    <div class="profile-content">
+        <h2>Cài Đặt Tài Khoản</h2>
+        
+        <form method="post">
+            <div class="settings-section">
+                <div class="settings-title">Thông Báo</div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-label">Thông Báo Email</div>
+                        <div class="settings-description">Nhận thông báo qua email</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="emailNotification" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-label">Thông Báo Hệ Thống</div>
+                        <div class="settings-description">Nhận thông báo hệ thống</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="systemNotification" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-title">Bảo Mật</div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-label">Xác Minh Hai Bước</div>
+                        <div class="settings-description">Bảo vệ tài khoản của bạn với xác minh hai bước</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="twoFactorAuth">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-label">Đăng Nhập Lại</div>
+                        <div class="settings-description">Yêu cầu xác minh lại khi đăng nhập</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="loginVerification" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-title">Quyền Riêng Tư</div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-label">Hiển Thị Trực Tuyến</div>
+                        <div class="settings-description">Cho phép người khác xem khi bạn đang trực tuyến</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="onlineStatus" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="submit" class="btn-action">Lưu Cài Đặt</button>
+            </div>
+        </form>
+    </div>
+</div>

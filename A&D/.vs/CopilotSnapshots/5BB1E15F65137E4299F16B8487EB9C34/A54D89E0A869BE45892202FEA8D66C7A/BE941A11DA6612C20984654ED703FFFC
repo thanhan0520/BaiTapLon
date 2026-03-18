@@ -1,0 +1,146 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using A_D.Models;
+
+namespace A_D.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class HomeController : Controller
+    {
+        private readonly QuanLiBanSuaContext _context;
+
+        public HomeController(QuanLiBanSuaContext context)
+        {
+            _context = context;
+        }
+
+        // GET: Admin/Home
+        public IActionResult Index()
+        {
+            var totalProducts = _context.Milk.Count();
+            var totalValue = _context.Milk.Sum(m => m.Price * m.StockQuantity);
+            var lowStockProducts = _context.Milk.Where(m => m.StockQuantity < 5).Count();
+
+            ViewBag.TotalProducts = totalProducts;
+            ViewBag.TotalValue = totalValue;
+            ViewBag.LowStockProducts = lowStockProducts;
+
+            return View();
+        }
+
+        // GET: Admin/Home/Dashboard
+        public IActionResult dashBoard()
+        {
+            var milkList = _context.Milk.ToList();
+            return View(milkList);
+        }
+
+        // GET: Admin/Home/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Admin/Home/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Milk milk)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Milk.Add(milk);
+                    _context.SaveChanges();
+                    TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
+                    return RedirectToAction(nameof(dashBoard));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Lỗi khi thêm sản phẩm: " + ex.Message);
+                }
+            }
+            return View(milk);
+        }
+
+        // GET: Admin/Home/Edit/5
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var milk = _context.Milk.Find(id);
+            if (milk == null)
+            {
+                return NotFound();
+            }
+            return View(milk);
+        }
+
+        // POST: Admin/Home/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Milk milk)
+        {
+            if (id != milk.MilkId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(milk);
+                    _context.SaveChanges();
+                    TempData["SuccessMessage"] = "Cập nhật sản phẩm thành công!";
+                    return RedirectToAction(nameof(dashBoard));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Lỗi khi cập nhật: " + ex.Message);
+                }
+            }
+            return View(milk);
+        }
+
+        // GET: Admin/Home/Delete/5
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var milk = _context.Milk.Find(id);
+            if (milk == null)
+            {
+                return NotFound();
+            }
+            return View(milk);
+        }
+
+        // POST: Admin/Home/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var milk = _context.Milk.Find(id);
+            if (milk != null)
+            {
+                try
+                {
+                    _context.Milk.Remove(milk);
+                    _context.SaveChanges();
+                    TempData["SuccessMessage"] = "Xóa sản phẩm thành công!";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "Lỗi khi xóa: " + ex.Message;
+                }
+            }
+            return RedirectToAction(nameof(dashBoard));
+        }
+    }
+}

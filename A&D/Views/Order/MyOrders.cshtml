@@ -1,0 +1,211 @@
+﻿@model IEnumerable<Order>
+
+@{
+    ViewData["Title"] = "Đơn Hàng Của Tôi";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    }
+
+    .orders-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    .orders-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .order-item {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .order-item:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+
+    .order-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .order-id {
+        font-weight: 700;
+        color: #6366f1;
+        font-size: 1.1rem;
+    }
+
+    .order-date {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .order-status {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .status-processing {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-completed {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .order-items {
+        border-top: 1px solid #e5e7eb;
+        padding-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .item-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 0.95rem;
+    }
+
+    .order-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .order-total {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #047857;
+    }
+
+    .btn-view {
+        background: #4f46e5;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .btn-view:hover {
+        background: #4338ca;
+        color: white;
+    }
+
+    .btn-continue {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-block;
+    }
+
+    .btn-continue:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(99,102,241,0.3);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="orders-container">
+    <div class="orders-header">
+        <h1>📦 Đơn Hàng Của Tôi</h1>
+        <a href="/Home/Index" class="btn-continue">Tiếp Tục Mua Hàng</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        @foreach (var order in Model)
+        {
+            <div class="order-item">
+                <div class="order-top">
+                    <div>
+                        <div class="order-id">Đơn Hàng #@order.OrderId</div>
+                        <div class="order-date">@order.OrderDate?.ToString("dd/MM/yyyy HH:mm")</div>
+                    </div>
+                    <div>
+                        @{
+                            var statusClass = order.OrderStatus?.ToLower() switch
+                            {
+                                "pending" => "status-pending",
+                                "processing" => "status-processing",
+                                "completed" => "status-completed",
+                                "cancelled" => "status-cancelled",
+                                _ => "status-pending"
+                            };
+                        }
+                        <span class="order-status @statusClass">@order.OrderStatus</span>
+                    </div>
+                </div>
+
+                <div class="order-items">
+                    @foreach (var item in order.OrderItems ?? new List<OrderItem>())
+                    {
+                        <div class="item-row">
+                            <span>@item.Milk?.MilkName (@item.Quantity) x</span>
+                            <span>@((item.Price ?? 0) * (item.Quantity ?? 1)).ToString("N0") ₫</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="order-bottom">
+                    <div class="order-total">
+                        Tổng: @order.TotalAmount?.ToString("N0") ₫
+                    </div>
+                    <a href="/Order/OrderDetails/@order.OrderId" class="btn-view">Chi Tiết</a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="empty-state">
+            <h3>📦 Chưa có đơn hàng</h3>
+            <p>Bạn chưa đặt hàng nào. Hãy bắt đầu mua sắm!</p>
+            <br>
+            <a href="/Home/Index" class="btn-continue">Xem Sản Phẩm</a>
+        </div>
+    }
+</div>

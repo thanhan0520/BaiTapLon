@@ -1,0 +1,31 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace A_D.Areas.Admin.Controllers
+{
+    public class HomeController : Controller
+    {
+        public IActionResult Index()
+        {
+
+            return View();
+        }
+
+        public IActionResult dashBoard() {
+            
+            
+            return View();
+        }
+        public IActionResult Create() {
+
+            return View();
+        }
+        public IActionResult Edit() {
+            
+            return View();
+        }
+         public IActionResult Delete() {
+            
+            return View();
+        }
+    }
+}

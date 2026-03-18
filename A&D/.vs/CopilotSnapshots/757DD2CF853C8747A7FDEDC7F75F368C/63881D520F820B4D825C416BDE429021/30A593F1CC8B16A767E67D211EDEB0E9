@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <title>@ViewData["Title"] - A_D</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/A_D.styles.css" asp-append-version="true" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-bottom: 1px solid rgba(79, 70, 229, 0.1);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            padding: 0.75rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: clamp(1rem, 1.5vw, 1.5rem);
+            color: #4f46e5 !important;
+            margin-right: 1rem;
+            white-space: nowrap;
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.25rem 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+            outline: 2px solid #4f46e5;
+            outline-offset: 2px;
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 0.75rem !important;
+            margin: 0 0.25rem;
+            transition: color 0.3s ease;
+            color: #4f46e5 !important;
+        }
+
+        .nav-link:hover {
+            color: #4f46e5 !important;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            height: 2px;
+            background: #4f46e5;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.15);
+        }
+
+        .dropdown-menu {
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background: #f1f5f9;
+            color: #4f46e5;
+        }
+
+        .dropdown-divider {
+            margin: 0.5rem 0;
+            opacity: 0.5;
+        }
+
+        .container {
+            flex: 1;
+            padding: 1.5rem 0.75rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        main {
+            min-height: 60vh;
+            width: 100%;
+        }
+
+        .alert {
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 0.95rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        footer {
+            flex-shrink: 0;
+            background: white;
+            border-top: 1px solid rgba(79, 70, 229, 0.1);
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #4f46e5;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* RESPONSIVE */
+        @@media (max-width: 576px) {
+            html {
+                font-size: 14px;
+            }
+
+            .navbar {
+                padding: 0.5rem 0;
+            }
+
+            .container {
+                padding: 1rem 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.5rem 0.5rem !important;
+                margin: 0.25rem 0;
+                font-size: 0.9rem;
+            }
+
+            .nav-item {
+                width: 100%;
+            }
+
+            .navbar-nav {
+                gap: 0.5rem;
+            }
+
+            footer {
+                padding: 1.5rem 0.75rem;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+
+            main {
+                min-height: 50vh;
+            }
+        }
+
+        @@media (min-width: 1200px) {
+            .container {
+                max-width: 1200px;
+            }
+        }
+
+        /* FIX ZOOM ISSUES */
+        input, button, select, textarea {
+            font-size: 16px;
+        }
+
+        button, a.btn {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #4f46e5;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light mb-3">
+            <div class="container-fluid">
+
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    A_D
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    <ul class="navbar-nav flex-grow-1 align-items-center">
+
+                        <li class="nav-item me-3">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                Trang Chủ
+                            </a>
+                        </li>
+
+                        <!-- SEARCH -->
+                        <li class="nav-item w-50">
+                            <form asp-controller="Home" asp-action="Search" method="get" class="d-flex">
+                                <input type="text" name="keyword" class="form-control me-2"
+                                       placeholder="Tìm sản phẩm..." />
+                                <button class="btn btn-primary">
+                                    🔍
+                                </button>
+                            </form>
+                        </li>
+
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto align-items-center">
+
+                        <li class="nav-item me-3">
+                            <a class="nav-link cart-icon" asp-controller="Cart" asp-action="CartView">
+                                🛒
+                            </a>
+                        </li>
+
+                        @if (Context.Session.GetInt32("UserId") != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown"
+                                       role="button" data-bs-toggle="dropdown">
+                                    @Context.Session.GetString("UserName")
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    @if ((Context.Session.GetString("UserRole") ?? "").Trim().ToLower() == "admin")
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="/Administrator/Home/Index">
+                                                Vào trang quản trị
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                    }
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="User" asp-action="Profile">
+                                            Trang cá nhân
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Order" asp-action="MyOrders">
+                                            Đơn Hàng Của Tôi
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" asp-controller="User" asp-action="Logout">
+                                            Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-action="Login">
+                                    Đăng Nhập
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="User" asp-action="Register">
+                                    Đăng Ký
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <!-- THÔNG BÁO TEMP DATA -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            var msg = TempData["SuccessMessage"];
+            TempData.Remove("SuccessMessage");
+
+            <div class="alert alert-success text-center mt-3">
+                @msg
+            </div>
+        }
+
+        @if (TempData["FailMessage"] != null)
+        {
+            var msg = TempData["FailMessage"];
+            TempData.Remove("FailMessage");
+
+            <div class="alert alert-danger text-center mt-3">
+                @msg
+            </div>
+        }
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+    </div>
+
+    <footer class="text-center text-muted">
+        <div class="container">
+            &copy; 2026 - A_D -
+            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

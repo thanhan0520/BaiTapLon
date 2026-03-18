@@ -1,0 +1,132 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng Ký";
+}
+
+<style>
+    body {
+        background: linear-gradient(120deg, #e0f7fa, #e8f5e9);
+    }
+
+    .register-card {
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .register-header {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,0.25);
+            border-color: #28a745;
+        }
+
+    .btn-register {
+        border-radius: 10px;
+        padding: 10px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+    .login-link a {
+        text-decoration: none;
+        font-weight: 500;
+        color: #28a745;
+    }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card register-card">
+
+                <!-- HEADER -->
+                <div class="register-header">
+                    <h3 class="mb-0">Tạo tài khoản mới</h3>
+                    <small>Tham gia cùng chúng tôi ngay hôm nay</small>
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body p-4">
+
+                    <form asp-action="Register" asp-controller="User" method="post">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <!-- USERNAME -->
+                        <div class="form-group mb-3">
+                            <label asp-for="UserName" class="fw-semibold"></label>
+                            <input asp-for="UserName" class="form-control" placeholder="Nhập tên người dùng" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <!-- EMAIL -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="fw-semibold"></label>
+                            <input asp-for="Email" class="form-control" placeholder="example@gmail.com" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <!-- PASSWORD -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Password" class="fw-semibold"></label>
+                            <input asp-for="Password" class="form-control" placeholder="Nhập mật khẩu" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <!-- CONFIRM PASSWORD -->
+                        <div class="form-group mb-4">
+                            <label asp-for="ConfirmPassword" class="fw-semibold"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Nhập lại mật khẩu" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <!-- BUTTON -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-register">
+                                Đăng Ký
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <!-- LOGIN LINK -->
+                    <div class="mt-4 text-center login-link">
+                        <p class="mb-0">
+                            Đã có tài khoản?
+                            <a asp-action="Login" asp-controller="User">Đăng nhập ngay</a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
